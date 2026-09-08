@@ -63,8 +63,27 @@ class StockService
                 'user_id'        => $userId,
             ]);
 
-            // Note: In the future, we can dispatch a LowStockDetected event here 
-            // if ($stock->product->isLowStock()) { ... }
+            // 5. Trigger Low Stock Email Alert if necessary
+            if ($quantityDelta < 0 && $stock->product->isLowStock()) {
+                $admins = \App\Models\User::where('role', 'admin')->get();
+                $productName = $stock->product->name;
+                $currentTotal = $stock->product->totalStock();
+                
+                foreach ($admins as $admin) {
+                    try {
+                        \Illuminate\Support\Facades\Mail::raw(
+                            "Alert: {$productName} has dropped to {$currentTotal} units, which is at or below its reorder point of {$stock->product->reorder_point}.",
+                            function ($message) use ($admin, $productName) {
+                                $message->to($admin->email)
+                                        ->subject("Low Stock Alert: {$productName}");
+                            }
+                        );
+                    } catch (\Exception $e) {
+                        // Fail silently if mail server is not configured in local environment
+                        \Illuminate\Support\Facades\Log::error("Failed to send low stock alert for {$productName}: " . $e->getMessage());
+                    }
+                }
+            }
 
             return $movement;
         });

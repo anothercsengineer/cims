@@ -10,7 +10,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
                     
-                    <form method="POST" action="{{ route('products.store') }}">
+                    <form method="POST" action="{{ route('products.store') }}" enctype="multipart/form-data">
                         @csrf
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -71,8 +71,15 @@
                                     </div>
                                     <div>
                                         <x-input-label for="reorder_quantity" :value="__('Reorder Quantity')" />
-                                        <x-text-input id="reorder_quantity" class="block mt-1 w-full" type="number" name="reorder_quantity" :value="old('reorder_quantity', 0)" required />
+                                        <x-text-input id="reorder_quantity" class="block mt-1 w-full" type="number" name="reorder_quantity" :value="old('reorder_quantity', 10)" required />
+                                        <x-input-error :messages="$errors->get('reorder_quantity')" class="mt-2" />
                                     </div>
+                                </div>
+
+                                <div class="md:col-span-2">
+                                    <x-input-label for="image" :value="__('Product Image')" />
+                                    <input id="image" class="block mt-1 w-full border-gray-300 shadow-sm" type="file" name="image" accept="image/*" />
+                                    <x-input-error :messages="$errors->get('image')" class="mt-2" />
                                 </div>
                                 
                                 <div class="block mt-6">

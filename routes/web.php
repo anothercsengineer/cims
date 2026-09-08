@@ -26,8 +26,14 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 // Inventory Management Routes (Admin, Manager, Staff)
 Route::middleware(['auth', 'role:admin,manager,staff'])->group(function () {
+    Route::resource('categories', \App\Http\Controllers\CategoryController::class)->except(['show', 'destroy']);
+    Route::post('products/import', [\App\Http\Controllers\ProductController::class, 'import'])->name('products.import');
     Route::resource('products', \App\Http\Controllers\ProductController::class)->except(['show', 'destroy']);
+    
+    // Stock Mechanics
     Route::post('stock/adjust', [\App\Http\Controllers\StockController::class, 'adjust'])->name('stock.adjust');
+    Route::get('stock/transfer', [\App\Http\Controllers\StockController::class, 'showTransferForm'])->name('stock.transfer');
+    Route::post('stock/transfer', [\App\Http\Controllers\StockController::class, 'executeTransfer'])->name('stock.transfer.execute');
     
     // Purchasing
     Route::resource('suppliers', \App\Http\Controllers\SupplierController::class)->except(['show', 'destroy']);
