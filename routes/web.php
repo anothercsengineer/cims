@@ -38,6 +38,10 @@ Route::middleware(['auth', 'role:admin,manager,staff'])->group(function () {
     Route::resource('customers', \App\Http\Controllers\CustomerController::class)->except(['show', 'destroy']);
     Route::resource('sales-orders', \App\Http\Controllers\SalesOrderController::class)->except(['edit', 'update', 'destroy']);
     Route::post('sales-orders/{sales_order}/fulfill', [\App\Http\Controllers\SalesOrderController::class, 'fulfill'])->name('sales-orders.fulfill');
+
+    // Reports & Exports
+    Route::get('reports/inventory', [\App\Http\Controllers\ReportController::class, 'exportInventory'])->name('reports.inventory');
+    Route::get('reports/ledger', [\App\Http\Controllers\ReportController::class, 'exportLedger'])->name('reports.ledger');
 });
 
 // Settings & Config Routes (Admin, Manager)
