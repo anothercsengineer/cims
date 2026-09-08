@@ -33,6 +33,11 @@ Route::middleware(['auth', 'role:admin,manager,staff'])->group(function () {
     Route::resource('suppliers', \App\Http\Controllers\SupplierController::class)->except(['show', 'destroy']);
     Route::resource('purchase-orders', \App\Http\Controllers\PurchaseOrderController::class)->except(['edit', 'update', 'destroy']);
     Route::post('purchase-orders/{purchase_order}/receive', [\App\Http\Controllers\PurchaseOrderController::class, 'receive'])->name('purchase-orders.receive');
+
+    // Sales
+    Route::resource('customers', \App\Http\Controllers\CustomerController::class)->except(['show', 'destroy']);
+    Route::resource('sales-orders', \App\Http\Controllers\SalesOrderController::class)->except(['edit', 'update', 'destroy']);
+    Route::post('sales-orders/{sales_order}/fulfill', [\App\Http\Controllers\SalesOrderController::class, 'fulfill'])->name('sales-orders.fulfill');
 });
 
 // Settings & Config Routes (Admin, Manager)
