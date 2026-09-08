@@ -15,6 +15,16 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    
+                    <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')">
+                        {{ __('Products') }}
+                    </x-nav-link>
+
+                    @if(auth()->check() && (auth()->user()->isAdmin() || auth()->user()->isManager()))
+                        <x-nav-link :href="route('warehouses.index')" :active="request()->routeIs('warehouses.*')">
+                            {{ __('Warehouses') }}
+                        </x-nav-link>
+                    @endif
 
                     @if(auth()->check() && auth()->user()->isAdmin())
                         <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">
@@ -76,6 +86,16 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+
+            <x-responsive-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')">
+                {{ __('Products') }}
+            </x-responsive-nav-link>
+
+            @if(auth()->check() && (auth()->user()->isAdmin() || auth()->user()->isManager()))
+                <x-responsive-nav-link :href="route('warehouses.index')" :active="request()->routeIs('warehouses.*')">
+                    {{ __('Warehouses') }}
+                </x-responsive-nav-link>
+            @endif
 
             @if(auth()->check() && auth()->user()->isAdmin())
                 <x-responsive-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">

@@ -19,7 +19,18 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-// admin only
+// Admin Only Routes
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('users', \App\Http\Controllers\UserController::class)->except(['show', 'destroy']);
+});
+
+// Inventory Management Routes (Admin, Manager, Staff)
+Route::middleware(['auth', 'role:admin,manager,staff'])->group(function () {
+    Route::resource('products', \App\Http\Controllers\ProductController::class)->except(['show', 'destroy']);
+    Route::post('stock/adjust', [\App\Http\Controllers\StockController::class, 'adjust'])->name('stock.adjust');
+});
+
+// Settings & Config Routes (Admin, Manager)
+Route::middleware(['auth', 'role:admin,manager'])->group(function () {
+    Route::resource('warehouses', \App\Http\Controllers\WarehouseController::class)->except(['show', 'destroy']);
 });
