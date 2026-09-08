@@ -3,11 +3,16 @@
         <x-slot name="header">
             <div class="flex justify-between items-center">
                 <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                    {{ __('Products') }}
+                    {{ __('Products & Inventory') }}
                 </h2>
-                <a href="{{ route('products.create') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700">
-                    Add Product
-                </a>
+                <div class="flex space-x-3">
+                    <a href="{{ route('stock.transfer') }}" class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700">
+                        Transfer Stock
+                    </a>
+                    <a href="{{ route('products.create') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700">
+                        Add Product
+                    </a>
+                </div>
             </div>
         </x-slot>
 
@@ -25,6 +30,23 @@
                         <span class="block sm:inline">{{ session('error') }}</span>
                     </div>
                 @endif
+
+                <!-- CSV Import Form -->
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
+                    <div class="p-6 bg-white border-b border-gray-200">
+                        <form action="{{ route('products.import') }}" method="POST" enctype="multipart/form-data" class="flex items-center space-x-4">
+                            @csrf
+                            <div>
+                                <label for="csv_file" class="block text-sm font-medium text-gray-700">Bulk Import Products (CSV)</label>
+                                <input type="file" name="csv_file" id="csv_file" accept=".csv,.txt" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" required>
+                            </div>
+                            <div class="pt-6">
+                                <x-primary-button type="submit">Import</x-primary-button>
+                            </div>
+                        </form>
+                        <p class="text-xs text-gray-500 mt-2">Format: SKU, Name, Description, Category ID, UoM, Cost, Sale, Reorder Point, Reorder Qty</p>
+                    </div>
+                </div>
 
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 bg-white border-b border-gray-200">

@@ -39,10 +39,15 @@ class ProductController extends Controller
             'sale_price' => ['required', 'numeric', 'min:0'],
             'reorder_point' => ['required', 'integer', 'min:0'],
             'reorder_quantity' => ['required', 'integer', 'min:0'],
+            'image' => ['nullable', 'image', 'max:2048'],
             'is_archived' => ['boolean'],
         ]);
 
         $validated['is_archived'] = $request->has('is_archived');
+
+        if ($request->hasFile('image')) {
+            $validated['image_url'] = $request->file('image')->store('products', 'public');
+        }
 
         Product::create($validated);
 
@@ -67,13 +72,45 @@ class ProductController extends Controller
             'sale_price' => ['required', 'numeric', 'min:0'],
             'reorder_point' => ['required', 'integer', 'min:0'],
             'reorder_quantity' => ['required', 'integer', 'min:0'],
+            'image' => ['nullable', 'image', 'max:2048'],
             'is_archived' => ['boolean'],
         ]);
 
         $validated['is_archived'] = $request->has('is_archived');
 
+        if ($request->hasFile('image')) {
+            $validated['image_url'] = $request->file('image')->store('products', 'public');
+        }
+
         $product->update($validated);
 
         return redirect()->route('products.index')->with('success', 'Product updated successfully.');
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate(['csv_file' => 'required|file|mimes:csv,txt']);
+        
+        $handle = fopen($request->file('csv_file')->getRealPath(), 'r');
+        fgetcsv($handle); // Skip header row
+        
+        while (($row = fgetcsv($handle)) !== false) {
+            Product::updateOrCreate(
+                ['sku' => $row[0]],
+                [
+                    'name' => $row[1],
+                    'description' => $row[2],
+                    'category_id' => !empty($row[3]) ? $row[3] : null,
+                    'unit_of_measure' => $row[4] ?? 'ea',
+                    'cost_price' => $row[5] ?? 0,
+                    'sale_price' => $row[6] ?? 0,
+                    'reorder_point' => $row[7] ?? 0,
+                    'reorder_quantity' => $row[8] ?? 0,
+                ]
+            );
+        }
+        fclose($handle);
+        
+        return back()->with('success', 'Products bulk imported successfully!');
     }
 }
