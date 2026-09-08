@@ -24,6 +24,12 @@
                         <x-nav-link :href="route('warehouses.index')" :active="request()->routeIs('warehouses.*')">
                             {{ __('Warehouses') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('suppliers.index')" :active="request()->routeIs('suppliers.*')">
+                            {{ __('Suppliers') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('purchase-orders.index')" :active="request()->routeIs('purchase-orders.*')">
+                            {{ __('Purchase Orders') }}
+                        </x-nav-link>
                     @endif
 
                     @if(auth()->check() && auth()->user()->isAdmin())
@@ -94,6 +100,12 @@
             @if(auth()->check() && (auth()->user()->isAdmin() || auth()->user()->isManager()))
                 <x-responsive-nav-link :href="route('warehouses.index')" :active="request()->routeIs('warehouses.*')">
                     {{ __('Warehouses') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('suppliers.index')" :active="request()->routeIs('suppliers.*')">
+                    {{ __('Suppliers') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('purchase-orders.index')" :active="request()->routeIs('purchase-orders.*')">
+                    {{ __('Purchase Orders') }}
                 </x-responsive-nav-link>
             @endif
 
