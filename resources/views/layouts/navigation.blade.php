@@ -30,6 +30,12 @@
                         <x-nav-link :href="route('purchase-orders.index')" :active="request()->routeIs('purchase-orders.*')">
                             {{ __('Purchase Orders') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('customers.index')" :active="request()->routeIs('customers.*')">
+                            {{ __('Customers') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('sales-orders.index')" :active="request()->routeIs('sales-orders.*')">
+                            {{ __('Sales Orders') }}
+                        </x-nav-link>
                     @endif
 
                     @if(auth()->check() && auth()->user()->isAdmin())
@@ -106,6 +112,12 @@
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('purchase-orders.index')" :active="request()->routeIs('purchase-orders.*')">
                     {{ __('Purchase Orders') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('customers.index')" :active="request()->routeIs('customers.*')">
+                    {{ __('Customers') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('sales-orders.index')" :active="request()->routeIs('sales-orders.*')">
+                    {{ __('Sales Orders') }}
                 </x-responsive-nav-link>
             @endif
 
