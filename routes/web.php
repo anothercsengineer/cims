@@ -28,6 +28,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 Route::middleware(['auth', 'role:admin,manager,staff'])->group(function () {
     Route::resource('products', \App\Http\Controllers\ProductController::class)->except(['show', 'destroy']);
     Route::post('stock/adjust', [\App\Http\Controllers\StockController::class, 'adjust'])->name('stock.adjust');
+    
+    // Purchasing
+    Route::resource('suppliers', \App\Http\Controllers\SupplierController::class)->except(['show', 'destroy']);
+    Route::resource('purchase-orders', \App\Http\Controllers\PurchaseOrderController::class)->except(['edit', 'update', 'destroy']);
+    Route::post('purchase-orders/{purchase_order}/receive', [\App\Http\Controllers\PurchaseOrderController::class, 'receive'])->name('purchase-orders.receive');
 });
 
 // Settings & Config Routes (Admin, Manager)
